@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-header);
+    font-weight: 600;
+}
+
+body {
+    background-color: #111827;
+    color: white;
+    overflow-x: hidden;
+    font-family: var(--font-body);
+    font-weight: 400;
+}
+
+:root {
+    --font-header: "Libre Baskerville", serif;
+    --font-body: "Fira Mono", monospace;
+}
+
+*:focus {
+    outline: 2px solid rgba(255, 140, 0, 0.5);
+    outline-offset: 2px;
+}
