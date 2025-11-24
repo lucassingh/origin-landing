@@ -125,6 +125,44 @@ export function HeroSection() {
         }
     }
 
+    useEffect(() => {
+        const videoElement = videoRef.current
+        if (!videoElement) return
+
+        const forceAutoplay = async () => {
+            try {
+                videoElement.muted = true
+                await videoElement.play()
+                console.log('Autoplay exitoso')
+            } catch (error) {
+                console.log('Autoplay falló, intentando de nuevo...', error)
+
+                setTimeout(() => {
+                    videoElement.play().catch(e => {
+                        console.log('Segundo intento falló:', e)
+                    })
+                }, 500)
+            }
+        }
+
+        if (videoElement.readyState >= 3) {
+            forceAutoplay()
+        } else {
+            videoElement.addEventListener('loadeddata', forceAutoplay)
+        }
+        return () => {
+            videoElement.removeEventListener('loadeddata', forceAutoplay)
+        }
+    }, [])
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            window.dispatchEvent(new Event('scroll'));
+        }, 100);
+
+        return () => clearTimeout(timeout);
+    }, []);
+
     const titleLine1Desktop = "Diseño y desarrollo web"
     const titleLine2Desktop = ["que", "impulsan", "tu", "negocio"]
 
@@ -158,6 +196,7 @@ export function HeroSection() {
                     muted
                     loop
                     playsInline
+                    webkit-playsinline="true"
                     className="w-full h-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

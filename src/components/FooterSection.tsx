@@ -7,6 +7,7 @@ import {
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
 import { LogoFooter } from './UI/LogoFooter';
+import logoFooterMobile from '../assets/imgs/logos/logo-footer-mobile.svg'
 
 export function FooterSection() {
     const containerVariants = {
@@ -128,15 +129,28 @@ export function FooterSection() {
             </div>
 
             <div className="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12 xl:px-16 py-16 md:py-20 lg:py-24">
+                {/* LOGO PRIMERO - ESTRUCTURA MOBILE */}
                 <motion.div
-                    className="grid grid-cols-1 gap-x-8 gap-y-12 pb-12 md:gap-y-16 md:pb-16 lg:grid-cols-[1fr_0.6fr] lg:gap-y-8 lg:pb-20"
+                    className="flex flex-col lg:grid lg:grid-cols-[1fr_0.6fr] lg:gap-x-8 lg:gap-y-8 lg:pb-20"
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
+                    viewport={{ once: true, margin: "-100px" }}
                     variants={containerVariants}
                 >
+                    {/* MOBILE: Logo primero */}
                     <motion.div
-                        className="space-y-8"
+                        className="lg:hidden mb-12 text-left"
+                        variants={itemVariants}
+                    >
+                        <img
+                            src={logoFooterMobile}
+                            alt="Origin Studio"
+                            className="max-w-[280px]"
+                        />
+                    </motion.div>
+
+                    <motion.div
+                        className="hidden lg:block space-y-8"
                         variants={containerVariants}
                     >
                         <motion.div
@@ -195,64 +209,127 @@ export function FooterSection() {
                         </motion.div>
 
                         <motion.div
-                            className="mb-0 mt-20"
+                            className="mt-8 lg:mt-20"
                             variants={itemVariants}
                         >
-                            <div className="w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-0">
-                                <LogoFooter />
-                            </div>
+                            <LogoFooter />
                         </motion.div>
                     </motion.div>
 
-                    <motion.div
-                        className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:gap-12"
-                        variants={containerVariants}
-                    >
-                        <motion.div variants={itemVariants}>
-                            <h3 className="mb-6 text-lg font-semibold text-gray-300">Navegación</h3>
-                            <ul className="space-y-3">
-                                {navigationLinks.principales.map((link) => (
-                                    <motion.li key={link.name}>
+                    {/* CONTENIDO DESPUÉS DEL LOGO EN MOBILE */}
+                    <div className="flex flex-col lg:contents">
+                        {/* Información de contacto - MOBILE */}
+                        <motion.div
+                            className="lg:hidden space-y-8 mb-12"
+                            variants={containerVariants}
+                        >
+                            <motion.div
+                                className="space-y-6"
+                                variants={containerVariants}
+                            >
+                                <motion.div variants={itemVariants}>
+                                    <p className="mb-2 text-sm font-semibold text-gray-300">Dirección</p>
+                                    <p className="text-white">Buenos Aires, Argentina</p>
+                                </motion.div>
+
+                                <motion.div variants={itemVariants}>
+                                    <p className="mb-2 text-sm font-semibold text-gray-300">Contacto</p>
+                                    <div className="space-y-1">
                                         <motion.a
-                                            href={link.href}
-                                            className="text-white hover:text-[#FF8C00] transition-colors duration-300 block py-1"
-                                            variants={linkVariants}
+                                            href="tel:+5493462565888"
+                                            className="block text-white hover:text-[#FF8C00] transition-colors duration-300"
+                                            whileHover={{ x: 5 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            +54 9 (3462) 565888
+                                        </motion.a>
+                                        <motion.a
+                                            href="mailto:info@originstudio.com"
+                                            className="block text-white hover:text-[#FF8C00] transition-colors duration-300"
+                                            whileHover={{ x: 5 }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            info@originstudio.com
+                                        </motion.a>
+                                    </div>
+                                </motion.div>
+                            </motion.div>
+
+                            <motion.div
+                                className="pt-4"
+                                variants={itemVariants}
+                            >
+                                <p className="mb-4 text-sm font-semibold text-gray-300">Síguenos</p>
+                                <div className="flex items-center gap-4">
+                                    {socialLinks.map((social, index) => (
+                                        <motion.a
+                                            key={social.label}
+                                            href={social.href}
+                                            className="text-white"
+                                            variants={socialIconVariants}
                                             initial="rest"
                                             whileHover="hover"
+                                            custom={index}
+                                            aria-label={social.label}
                                         >
-                                            {link.name}
+                                            <social.icon className="size-6 md:size-7" />
                                         </motion.a>
-                                    </motion.li>
-                                ))}
-                            </ul>
+                                    ))}
+                                </div>
+                            </motion.div>
                         </motion.div>
 
-                        <motion.div variants={itemVariants}>
-                            <h3 className="mb-6 text-lg font-semibold text-gray-300">Más información</h3>
-                            <ul className="space-y-3">
-                                {navigationLinks.secundarios.map((link) => (
-                                    <motion.li key={link.name}>
-                                        <motion.a
-                                            href={link.href}
-                                            className="text-white hover:text-[#FF8C00] transition-colors duration-300 block py-1"
-                                            variants={linkVariants}
-                                            initial="rest"
-                                            whileHover="hover"
-                                        >
-                                            {link.name}
-                                        </motion.a>
-                                    </motion.li>
-                                ))}
-                            </ul>
+                        {/* Navegación - AMBAS VERSIONES */}
+                        <motion.div
+                            className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:gap-12"
+                            variants={containerVariants}
+                        >
+                            <motion.div variants={itemVariants}>
+                                <h3 className="mb-6 text-lg font-semibold text-gray-300">Navegación</h3>
+                                <ul className="space-y-3">
+                                    {navigationLinks.principales.map((link) => (
+                                        <motion.li key={link.name}>
+                                            <motion.a
+                                                href={link.href}
+                                                className="text-white hover:text-[#FF8C00] transition-colors duration-300 block py-1"
+                                                variants={linkVariants}
+                                                initial="rest"
+                                                whileHover="hover"
+                                            >
+                                                {link.name}
+                                            </motion.a>
+                                        </motion.li>
+                                    ))}
+                                </ul>
+                            </motion.div>
+
+                            <motion.div variants={itemVariants}>
+                                <h3 className="mb-6 text-lg font-semibold text-gray-300">Más información</h3>
+                                <ul className="space-y-3">
+                                    {navigationLinks.secundarios.map((link) => (
+                                        <motion.li key={link.name}>
+                                            <motion.a
+                                                href={link.href}
+                                                className="text-white hover:text-[#FF8C00] transition-colors duration-300 block py-1"
+                                                variants={linkVariants}
+                                                initial="rest"
+                                                whileHover="hover"
+                                            >
+                                                {link.name}
+                                            </motion.a>
+                                        </motion.li>
+                                    ))}
+                                </ul>
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
+                    </div>
                 </motion.div>
 
                 <motion.div
                     className="h-px w-full bg-gray-700 mb-8"
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 />
 
@@ -260,7 +337,7 @@ export function FooterSection() {
                     className="flex flex-col-reverse items-start justify-between gap-6 md:flex-row md:items-center md:gap-8"
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
+                    viewport={{ once: true, margin: "-100px" }}
                     variants={containerVariants}
                 >
                     <motion.p
@@ -293,7 +370,7 @@ export function FooterSection() {
                     className="mt-12 text-center"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, margin: "-50px" }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                 >
                     <p className="text-gray-400 text-sm mb-2">

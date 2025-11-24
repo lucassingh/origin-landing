@@ -93,7 +93,7 @@ export const Navbar = (props: Navbar20Props) => {
         <>
             <motion.section
                 id="relume"
-                className="fixed top-4 left-4 right-4 z-50 flex min-h-16 items-center px-8 md:min-h-18 mx-auto max-w-7xl rounded-2xl border border-white/10"
+                className="fixed top-4 left-4 right-4 z-40 flex min-h-16 items-center px-8 md:min-h-18 mx-auto max-w-7xl rounded-2xl border border-white/10"
                 style={{
                     backgroundColor: navbarBackground,
                     backdropFilter: navbarBlur,
@@ -103,66 +103,60 @@ export const Navbar = (props: Navbar20Props) => {
                     <a href={logo.url}>
                         <img src={logo.src} alt={logo.alt} className="w-10 h-10 brightness-0 invert" />
                     </a>
-                    <div
-                        className={clsx(
-                            "hidden lg:items-center lg:justify-center lg:overflow-hidden lg:px-0 lg:text-center",
-                            !isMenuOpen && "lg:flex",
-                        )}
-                    >
+
+                    {/* Desktop Navigation */}
+                    <div className="hidden lg:flex items-center justify-center overflow-hidden px-0 text-center">
                         {navLinks.map((navLink, index) => (
-                            <div key={index} className="first:pt-4 lg:first:pt-0">
+                            <div key={index}>
                                 {navLink.subMenuLinks && navLink.subMenuLinks.length > 0 ? (
                                     <SubMenu navLink={navLink} />
                                 ) : (
                                     <motion.button
-                                        onClick={() => {
-                                            smoothScrollTo(navLink.url);
-                                            setIsMenuOpen(false);
-                                        }}
-                                        className="group relative cursor-pointer block py-3 text-md lg:px-4 lg:py-2 lg:text-base text-white/80 transition-all duration-300"
+                                        onClick={() => smoothScrollTo(navLink.url)}
+                                        className="group relative cursor-pointer px-4 py-2 text-base text-white/80 transition-all duration-300"
                                         whileHover={{ color: "#FFFFFF" }}
                                         whileTap={{ scale: 0.95 }}
                                     >
                                         {navLink.title}
                                         <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-[#FF8C00] rounded-full transform -translate-x-1/2 opacity-0 transition-all duration-300 group-hover:w-4/5 group-hover:opacity-100" />
-
                                     </motion.button>
                                 )}
                             </div>
                         ))}
                     </div>
-                    <div className="flex items-center justify-center gap-2 lg:gap-4">
-                        <button
-                            className="-mr-2 flex size-12 flex-col items-center justify-center justify-self-end lg:mr-0 cursor-pointer group"
-                            onClick={() => setIsMenuOpen((prev) => !prev)}
-                        >
-                            <span className="relative flex size-6 flex-col items-center justify-center">
-                                <motion.span
-                                    className="absolute top-[3px] h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
-                                    animate={isMenuOpen ? "open" : "close"}
-                                    variants={topLineVariants}
-                                />
-                                <motion.span
-                                    className="absolute h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
-                                    animate={isMenuOpen ? "open" : "close"}
-                                    variants={middleLineVariants}
-                                />
-                                <motion.span
-                                    className="absolute h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
-                                    animate={isMenuOpen ? "openSecond" : "closeSecond"}
-                                    variants={middleLineVariants}
-                                />
-                                <motion.span
-                                    className="absolute bottom-[3px] h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
-                                    animate={isMenuOpen ? "open" : "close"}
-                                    variants={bottomLineVariants}
-                                />
-                            </span>
-                        </button>
-                    </div>
+
+                    {/* Hamburguer Menu - Siempre visible */}
+                    <button
+                        className="flex size-12 flex-col items-center justify-center cursor-pointer group lg:mr-0"
+                        onClick={() => setIsMenuOpen((prev) => !prev)}
+                    >
+                        <span className="relative flex size-6 flex-col items-center justify-center">
+                            <motion.span
+                                className="absolute top-[3px] h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
+                                animate={isMenuOpen ? "open" : "close"}
+                                variants={topLineVariants}
+                            />
+                            <motion.span
+                                className="absolute h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
+                                animate={isMenuOpen ? "open" : "close"}
+                                variants={middleLineVariants}
+                            />
+                            <motion.span
+                                className="absolute h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
+                                animate={isMenuOpen ? "openSecond" : "closeSecond"}
+                                variants={middleLineVariants}
+                            />
+                            <motion.span
+                                className="absolute bottom-[3px] h-0.5 w-full bg-white group-hover:bg-[#FF8C00] transition-colors duration-200"
+                                animate={isMenuOpen ? "open" : "close"}
+                                variants={bottomLineVariants}
+                            />
+                        </span>
+                    </button>
                 </div>
             </motion.section>
 
+            {/* Mobile Menu */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <Menu
@@ -186,6 +180,7 @@ export const Navbar = (props: Navbar20Props) => {
 
 const SubMenu = ({ navLink }: { navLink: NavLink }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
     return (
         <section
             onMouseEnter={() => setIsDropdownOpen(true)}
@@ -193,7 +188,7 @@ const SubMenu = ({ navLink }: { navLink: NavLink }) => {
             className="relative"
         >
             <button
-                className="flex w-full items-center justify-center gap-4 py-3 text-center text-md lg:w-auto lg:flex-none lg:justify-start lg:gap-2 lg:px-4 lg:py-2 lg:text-base text-white/80 hover:text-white transition-colors duration-200"
+                className="flex items-center justify-center gap-2 px-4 py-2 text-base text-white/80 hover:text-white transition-colors duration-200"
                 onClick={() => setIsDropdownOpen((prev) => !prev)}
             >
                 <span>{navLink.title}</span>
@@ -209,6 +204,7 @@ const SubMenu = ({ navLink }: { navLink: NavLink }) => {
                     <RxChevronDown />
                 </motion.span>
             </button>
+
             {isDropdownOpen && (
                 <AnimatePresence>
                     <motion.nav
@@ -224,17 +220,17 @@ const SubMenu = ({ navLink }: { navLink: NavLink }) => {
                             close: {
                                 visibility: "hidden",
                                 opacity: "var(--opacity-close, 0)",
-                                y: "var(--y-close, 0%)",
+                                y: "var(--y-close, 25%)",
                             },
                         }}
                         transition={{ duration: 0.2 }}
-                        className="bg-[#070b16]/95 backdrop-blur-xl lg:absolute lg:z-50 lg:p-4 lg:[--y-close:25%] lg:shadow-2xl lg:border lg:border-white/10 lg:rounded-xl"
+                        className="absolute top-full left-0 z-50 bg-[#070b16]/95 backdrop-blur-xl p-4 shadow-2xl border border-white/10 rounded-xl min-w-48"
                     >
                         {navLink.subMenuLinks?.map((subMenuLink, index) => (
                             <a
                                 key={index}
                                 href={subMenuLink.url}
-                                className="block py-3 text-center text-white/80 lg:px-4 lg:py-2 lg:text-left hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg"
+                                className="block px-4 py-2 text-white/80 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg text-left"
                             >
                                 {subMenuLink.title}
                             </a>
@@ -292,7 +288,7 @@ const Menu = ({
 
     return (
         <motion.div
-            className="fixed inset-0 z-100 h-screen w-full overflow-hidden bg-[#070b16]/80 backdrop-blur-xl"
+            className="fixed inset-0 z-30 h-screen w-full overflow-hidden bg-[#070b16]/80 backdrop-blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -309,17 +305,9 @@ const Menu = ({
                 transition={{ duration: 0.2 }}
                 className="flex h-full flex-col overflow-auto px-[5%] pt-24"
             >
-                <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="absolute top-8 right-8 cursor-pointer size-12 flex items-center justify-center text-white/80 hover:text-white transition-colors duration-200 bg-white/10 rounded-full backdrop-blur-sm z-10"
-                >
-                    <svg className="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-
                 <div className="grid grid-cols-1 gap-y-6 py-4 md:gap-y-16 md:py-6 lg:my-auto lg:grid-cols-[1.2fr_1fr] lg:gap-x-16 lg:gap-y-0 lg:py-12 max-w-6xl mx-auto w-full">
-                    <div className="flex flex-col items-start space-y-4 lg:space-y-6">
+                    {/* Menu Links - Más grandes en mobile */}
+                    <div className="flex flex-col items-start space-y-6">
                         {menuLinks.map((menuLink, index) => (
                             <button
                                 key={index}
@@ -327,24 +315,22 @@ const Menu = ({
                                     smoothScrollTo(menuLink.url);
                                     setIsMenuOpen(false);
                                 }}
-                                className="group relative py-3 text-1xl font-bold leading-tight text-white md:text-4xl lg:text-3xl xl:text-3xl hover:text-white/90 transition-all duration-300 text-left cursor-pointer"
+                                className="group relative py-4 text-3xl font-bold leading-tight text-white md:text-4xl lg:text-3xl hover:text-white/90 transition-all duration-300 text-left cursor-pointer"
                             >
                                 {menuLink.title}
-                                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#FF8C00] transition-all duration-300 group-hover:w-full" />
+                                <span className="absolute bottom-0 left-0 w-0 h-1 bg-[#FF8C00] transition-all duration-300 group-hover:w-full" />
                             </button>
                         ))}
                     </div>
 
-                    <div className="my-auto lg:pl-8 lg:border-l lg:border-white/10 -mt-[30px]">
+                    {/* Contact Form - Solo en desktop */}
+                    <div className="my-auto lg:pl-8 lg:border-l lg:border-white/10 hidden lg:block">
                         <div className="space-y-1">
                             <div>
                                 <h5 className="mb-3 font-semibold text-lg text-white/80">{contactHeading}</h5>
                                 <p className="text-base text-white/60 leading-relaxed mb-6">{contactDescription}</p>
                                 <div className="max-w-sm">
-                                    <form
-                                        className="grid grid-cols-1 gap-3"
-                                        onSubmit={handleSubmit}
-                                    >
+                                    <form className="grid grid-cols-1 gap-3" onSubmit={handleSubmit}>
                                         <Input
                                             id="name"
                                             type="text"
@@ -424,32 +410,14 @@ export const Navbar20Defaults: Props = {
         { title: "Nosotros", url: "about" },
         { title: "Servicios", url: "services" },
         { title: "Proyectos", url: "projects" },
-        {
-            url: "contact",
-            title: "Contacto",
-        }
+        { title: "Contacto", url: "contact" }
     ],
     menuLinks: [
-        {
-            url: "home",
-            title: "Inicio",
-        },
-        {
-            url: "about",
-            title: "Nosotros",
-        },
-        {
-            url: "services",
-            title: "Servicios",
-        },
-        {
-            url: "projects",
-            title: "Proyectos",
-        },
-        {
-            url: "contact",
-            title: "Contacto",
-        }
+        { title: "Inicio", url: "home" },
+        { title: "Nosotros", url: "about" },
+        { title: "Servicios", url: "services" },
+        { title: "Proyectos", url: "projects" },
+        { title: "Contacto", url: "contact" }
     ],
     subtitle: "Estamos en contacto",
     getInTouch: {

@@ -10,9 +10,13 @@ import { HeroSection } from './HeroSection';
 import { FooterSection } from './FooterSection';
 import { AboutSection } from './AboutSection';
 import { ProjectsSection } from './ProjectsSection';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { LoaderComponent } from './UI/LoaderComponent';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Navbar } from './Navbar';
 
 export function MainApp() {
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if ('scrollRestoration' in history) {
@@ -21,38 +25,64 @@ export function MainApp() {
         window.scrollTo(0, 0);
     }, []);
 
+    const handleLoadingComplete = () => {
+        setIsLoading(false);
+        // Forzar un resize event para recalcular scroll triggers
+        window.dispatchEvent(new Event('resize'));
+    };
+
     return (
         <BackgroundProvider>
-            {/* hero section */}
-            <HeroSection />
+            <Navbar />
+            {/* Loader */}
+            <LoaderComponent onLoadingComplete={handleLoadingComplete} />
 
-            {/* about */}
-            <AboutSection />
+            {/* Contenido principal - NO usar display: none */}
+            <AnimatePresence mode="wait">
+                {!isLoading && (
+                    <motion.div
+                        key="main-content"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{
+                            duration: 1.2,
+                            ease: [0.83, 0, 0.17, 1]
+                        }}
+                    >
+                        {/* hero section */}
+                        <HeroSection />
 
-            {/* services */}
-            <ServicesSection />
+                        {/* about */}
+                        <AboutSection />
 
-            {/* Pricing */}
-            <PricingSection />
+                        {/* services */}
+                        <ServicesSection />
 
-            {/* worked */}
-            <HeaderAdvancedWorkSection />
-            <AdvancedWorkSection />
+                        {/* Pricing */}
+                        <PricingSection />
 
-            {/* Project Section */}
-            <ProjectsSection />
+                        {/* worked */}
+                        <HeaderAdvancedWorkSection />
+                        <AdvancedWorkSection />
 
-            {/* testimonial section */}
-            <TestimonialSection />
+                        {/* Project Section */}
+                        <ProjectsSection />
 
-            {/* faq section */}
-            <FaqSection />
+                        {/* testimonial section */}
+                        <TestimonialSection />
 
-            {/* contact section */}
-            <ContactSection />
+                        {/* faq section */}
+                        <FaqSection />
 
-            {/* footer */}
-            <FooterSection />
+                        {/* contact section */}
+                        <ContactSection />
+
+                        {/* footer */}
+                        <FooterSection />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </BackgroundProvider>
     );
 }
