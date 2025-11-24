@@ -1,17 +1,32 @@
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import video from '../assets/videos/hero/video.mp4'
 
 export function HeroSection() {
     const containerRef = useRef(null)
     const videoRef = useRef<HTMLVideoElement>(null)
+    const [isMobile, setIsMobile] = useState(false)
 
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"]
     })
 
-    const videoInset = useTransform(scrollYProgress, [0, 0.6], ["110px 0px 0px 00px", "0px"])
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768)
+        }
+
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
+
+    const videoInset = useTransform(scrollYProgress, [0, 0.6], [
+        isMobile ? "20px 0px 0px 0px" : "110px 0px 0px 0px",
+        "0px"
+    ])
     const videoRadius = useTransform(scrollYProgress, [0, 0.4], [10, 0])
     const videoScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.1])
     const videoOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.9])
@@ -110,10 +125,14 @@ export function HeroSection() {
         }
     }
 
-    const titleLine1 = "Diseño y desarrollo web"
-    const titleLine2Words = ["que", "impulsan", "tu", "negocio"]
+    const titleLine1Desktop = "Diseño y desarrollo web"
+    const titleLine2Desktop = ["que", "impulsan", "tu", "negocio"]
 
-    const serviceTags = ["#development", "#apps", "#branding", "#websites", "#uxui"]
+    const titleLine1Mobile = "Diseño y desarrollo"
+    const titleLine2Mobile = "web que impulsan"
+    const titleLine3Mobile = ["tu", "negocio"]
+
+    const serviceTags = ["#development", "#apps", "#branding", "#websites", "#UX/UI"]
 
     return (
         <motion.section
@@ -174,78 +193,154 @@ export function HeroSection() {
 
             <div className="relative z-10 w-full h-screen flex items-center justify-center px-6">
                 <div className="text-center">
+                    {/* MODIFICACIÓN: "Origin" más grande */}
                     <motion.h1
-                        className="font-gilroy font-light text-white text-5xl sm:text-6xl lg:text-9xl mb-8 tracking-wider"
+                        className="font-gilroy font-light text-white text-6xl sm:text-7xl lg:text-9xl mb-6 sm:mb-8 tracking-wider"
                         variants={itemVariants}
                     >
                         Origin
                     </motion.h1>
 
                     <motion.div
-                        className="font-gilroy font-light text-white text-2xl sm:text-3xl lg:text-5xl leading-tight mb-12 tracking-wider"
+                        className="font-gilroy font-light text-white text-xl sm:text-2xl lg:text-5xl leading-snug sm:leading-tight mb-8 sm:mb-12 tracking-wider"
                         variants={itemVariants}
                         style={{
                             opacity: titleOpacity,
                             y: titleY
                         }}
                     >
-                        <motion.div className="mb-2">
-                            {titleLine1.split(" ").map((word, index) => (
-                                <motion.span
-                                    key={index}
-                                    custom={index}
-                                    variants={wordVariants}
-                                    className="inline-block mr-3"
-                                >
-                                    {word}
-                                </motion.span>
-                            ))}
-                        </motion.div>
+                        {/* VERSIÓN DESKTOP (2 líneas) */}
+                        {!isMobile ? (
+                            <>
+                                <motion.div className="mb-2 sm:mb-3">
+                                    {titleLine1Desktop.split(" ").map((word, index) => (
+                                        <motion.span
+                                            key={index}
+                                            custom={index}
+                                            variants={wordVariants}
+                                            className="inline-block mr-2 sm:mr-3"
+                                        >
+                                            {word}
+                                        </motion.span>
+                                    ))}
+                                </motion.div>
 
-                        <motion.div>
-                            {titleLine2Words.map((word, index) => {
-                                const isEmphasis = word === "tu" || word === "negocio";
-                                const emphasisIndex = word === "tu" ? 0 : 1;
+                                <motion.div>
+                                    {titleLine2Desktop.map((word, index) => {
+                                        const isEmphasis = word === "tu" || word === "negocio";
+                                        const emphasisIndex = word === "tu" ? 0 : 1;
 
-                                return (
-                                    <motion.span
-                                        key={index}
-                                        custom={isEmphasis ? emphasisIndex : index + titleLine1.split(" ").length}
-                                        variants={isEmphasis ? emphasisVariants : wordVariants}
-                                        className={`inline-block mr-3 ${isEmphasis ? "relative" : ""}`}
-                                        animate={isEmphasis ? "glow" : ""}
-                                        whileHover={
-                                            isEmphasis
-                                                ? {
-                                                    scale: 1.05,
-                                                    transition: { duration: 0.3 }
-                                                }
-                                                : {}
-                                        }
-                                    >
-                                        {word}
-                                        {isEmphasis && (
+                                        return (
                                             <motion.span
-                                                className="absolute bottom-0 left-0 w-full h-px bg-white/30"
-                                                initial={{ scaleX: 0 }}
-                                                animate={{
-                                                    scaleX: 1,
-                                                    transition: {
-                                                        delay: 2.5 + (emphasisIndex * 0.2),
-                                                        duration: 0.6,
-                                                        ease: "easeOut"
-                                                    }
-                                                }}
-                                            />
-                                        )}
-                                    </motion.span>
-                                );
-                            })}
-                        </motion.div>
+                                                key={index}
+                                                custom={isEmphasis ? emphasisIndex : index + titleLine1Desktop.split(" ").length}
+                                                variants={isEmphasis ? emphasisVariants : wordVariants}
+                                                className={`inline-block mr-2 sm:mr-3 ${isEmphasis ? "relative" : ""}`}
+                                                animate={isEmphasis ? "glow" : ""}
+                                                whileHover={
+                                                    isEmphasis
+                                                        ? {
+                                                            scale: 1.05,
+                                                            transition: { duration: 0.3 }
+                                                        }
+                                                        : {}
+                                                }
+                                            >
+                                                {word}
+                                                {isEmphasis && (
+                                                    <motion.span
+                                                        className="absolute bottom-0 left-0 w-full h-px bg-white/30"
+                                                        initial={{ scaleX: 0 }}
+                                                        animate={{
+                                                            scaleX: 1,
+                                                            transition: {
+                                                                delay: 2.5 + (emphasisIndex * 0.2),
+                                                                duration: 0.6,
+                                                                ease: "easeOut"
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
+                                            </motion.span>
+                                        );
+                                    })}
+                                </motion.div>
+                            </>
+                        ) : (
+                            // VERSIÓN MOBILE (3 líneas)
+                            <>
+                                <motion.div className="mb-2">
+                                    {titleLine1Mobile.split(" ").map((word, index) => (
+                                        <motion.span
+                                            key={index}
+                                            custom={index}
+                                            variants={wordVariants}
+                                            className="inline-block mr-2"
+                                        >
+                                            {word}
+                                        </motion.span>
+                                    ))}
+                                </motion.div>
+
+                                <motion.div className="mb-2">
+                                    {titleLine2Mobile.split(" ").map((word, index) => (
+                                        <motion.span
+                                            key={index}
+                                            custom={index + titleLine1Mobile.split(" ").length}
+                                            variants={wordVariants}
+                                            className="inline-block mr-2"
+                                        >
+                                            {word}
+                                        </motion.span>
+                                    ))}
+                                </motion.div>
+
+                                <motion.div>
+                                    {titleLine3Mobile.map((word, index) => {
+                                        const isEmphasis = word === "tu" || word === "negocio";
+                                        const emphasisIndex = word === "tu" ? 0 : 1;
+
+                                        return (
+                                            <motion.span
+                                                key={index}
+                                                custom={isEmphasis ? emphasisIndex : index + titleLine1Mobile.split(" ").length + titleLine2Mobile.split(" ").length}
+                                                variants={isEmphasis ? emphasisVariants : wordVariants}
+                                                className={`inline-block mr-2 ${isEmphasis ? "relative" : ""}`}
+                                                animate={isEmphasis ? "glow" : ""}
+                                                whileHover={
+                                                    isEmphasis
+                                                        ? {
+                                                            scale: 1.05,
+                                                            transition: { duration: 0.3 }
+                                                        }
+                                                        : {}
+                                                }
+                                            >
+                                                {word}
+                                                {isEmphasis && (
+                                                    <motion.span
+                                                        className="absolute bottom-0 left-0 w-full h-px bg-white/30"
+                                                        initial={{ scaleX: 0 }}
+                                                        animate={{
+                                                            scaleX: 1,
+                                                            transition: {
+                                                                delay: 2.5 + (emphasisIndex * 0.2),
+                                                                duration: 0.6,
+                                                                ease: "easeOut"
+                                                            }
+                                                        }}
+                                                    />
+                                                )}
+                                            </motion.span>
+                                        );
+                                    })}
+                                </motion.div>
+                            </>
+                        )}
                     </motion.div>
 
                     <motion.div
-                        className="flex flex-wrap justify-center gap-4 mt-8"
+                        className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-6 sm:mt-8"
                         variants={itemVariants}
                         style={{
                             opacity: subtitleOpacity,
@@ -257,7 +352,7 @@ export function HeroSection() {
                                 key={index}
                                 custom={index}
                                 variants={tagVariants}
-                                className="text-sm font-light tracking-wide text-white/40 hover:text-white/60 transition-colors duration-300 cursor-default"
+                                className="text-xs sm:text-sm font-light tracking-wide text-white/40 hover:text-white/60 transition-colors duration-300 cursor-default"
                                 whileHover={{
                                     scale: 1.05,
                                     transition: { duration: 0.2 }
@@ -270,8 +365,9 @@ export function HeroSection() {
                 </div>
             </div>
 
+            {/* MODIFICACIÓN: Scroll indicator más arriba en mobile */}
             <motion.div
-                className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10"
+                className={`absolute ${isMobile ? 'bottom-10' : 'bottom-6'} left-1/2 transform -translate-x-1/2 z-10`}
                 style={{
                     opacity: useTransform(scrollYProgress, [0, 0.1], [1, 0])
                 }}
@@ -296,7 +392,7 @@ export function HeroSection() {
                             repeat: Infinity,
                             ease: "easeInOut"
                         }}
-                        className="w-px h-8 bg-white/30"
+                        className="w-px h-6 sm:h-8 bg-white/30"
                     />
                     <motion.p
                         className="text-xs font-light tracking-widest text-white/30 uppercase"
