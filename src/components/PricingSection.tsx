@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { BiCheck, BiStar, BiRocket, BiCrown } from 'react-icons/bi';
 import { Button } from './UI/Button';
 import { HeadingSection } from './UI/HeadingSection';
+import { openWhatsAppForPlan } from '../utils/linkWhattsapp';
 
 export function PricingSection() {
 
@@ -56,6 +57,7 @@ export function PricingSection() {
                 "Landing page avanzada",
                 "5 páginas internas",
                 "Diseño personalizado",
+                "Diseño responsive",
                 "Optimización SEO básica",
                 "Formularios avanzados",
                 "Integraciones básicas"
@@ -70,9 +72,10 @@ export function PricingSection() {
             icon: BiCrown,
             features: [
                 "Landing page + 5+ páginas internas",
-                "Optimización SEO avanzada",
-                "Integraciones avanzadas (APIs)",
-                "Panel de administración básico",
+                "Integraciones de datos externas (APIs)",
+                "Panel de administración (CMS)",
+                "Administración de base de datos",
+                "Almacenamiento Cloud",
                 "Soporte prioritario",
                 "Analytics integrado"
             ],
@@ -84,10 +87,10 @@ export function PricingSection() {
         <div id='pricing' className="w-full max-w-7xl mx-auto px-[5%] py-24">
             <HeadingSection
                 pillText="PRECIOS TRANSPARENTES"
-                title="Soluciones web a tu medida"
+                title="Soluciones web para cada necesidad"
                 subtitle={
                     <>
-                        Diseño profesional adaptado a tu presupuesto y necesidades.{" "}
+                        Diseño y desarrollo de software profesional adaptado a tu presupuesto{" "}
                         <span className="text-orange-400 font-semibold">Sin sorpresas, sin complicaciones.</span>
                     </>
                 }
@@ -164,9 +167,10 @@ export function PricingSection() {
                                         <span className="text-4xl md:text-5xl font-black text-white">
                                             {plan.price}
                                         </span>
-                                        <span className="text-gray-400 text-sm">USD</span>
+                                        <span className="text-gray-400 text-sm">U$D</span>
                                     </div>
-                                    <span className="text-gray-400 text-sm">pago único</span>
+                                    <span className="text-gray-400 text-sm font-medium">pago único</span><br />
+                                    <span className="text-gray-400 text-sm">No icluye mantenimiento</span>
                                 </motion.div>
 
                                 <motion.p
@@ -230,7 +234,7 @@ export function PricingSection() {
                                     variant="secondary"
                                     size="lg"
                                     className="w-full"
-                                    onClick={() => console.log(`Contactar por ${plan.name}`)}
+                                    onClick={() => openWhatsAppForPlan(plan.name)}
                                 >
                                     Contactar
                                 </Button>

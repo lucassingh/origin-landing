@@ -4,6 +4,7 @@ import { HeadingSection } from './UI/HeadingSection';
 import video1 from '../assets/videos/advanced-work/video-1.mp4';
 import img1 from '../assets/videos/advanced-work/img-2.jpg';
 import video3 from '../assets/videos/advanced-work/video-3.mp4';
+import { openCalendly } from '../utils/linkWhattsapp';
 
 export function AdvancedWorkSection() {
     const cardVariants = {
@@ -242,7 +243,7 @@ export function AdvancedWorkSection() {
                                             <Button
                                                 variant="secondary"
                                                 size="lg"
-                                                onClick={() => console.log(`Contactar por ${project.title}`)}
+                                                onClick={() => openCalendly(project.title)}
                                             >
                                                 Quiero una reunión
                                             </Button>
@@ -325,7 +326,7 @@ export function AdvancedWorkSection() {
                                             <Button
                                                 variant="secondary"
                                                 className="w-full"
-                                                onClick={() => console.log(`Contactar por ${project.title}`)}
+                                                onClick={() => openCalendly(project.title)}
                                             >
                                                 Quiero una reunión
                                             </Button>
@@ -334,7 +335,6 @@ export function AdvancedWorkSection() {
                                 </div>
                             )}
 
-                            {/* Corner Decorations */}
                             <motion.div
                                 className="absolute -top-2 -right-2 w-4 h-4 border-t-2 border-r-2 border-orange-400/30"
                                 animate={{

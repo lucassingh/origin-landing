@@ -46,7 +46,6 @@ export const AboutSection = () => {
                     transition={{ duration: 1, ease: "easeOut" }}
                     viewport={{ once: true }}
                 >
-                    {/* Badge con efecto glow */}
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -117,7 +116,7 @@ export const AboutSection = () => {
                             }}
                             className="text-sm md:text-base leading-relaxed text-gray-400 font-light"
                         >
-                            Cada proyecto nace de una idea única y se desarrolla con tecnologías de vanguardia como <span className="font-semibold text-orange-400">React</span>, garantizando un resultado robusto, escalable y 100% personalizado para tus objetivos.
+                            Cada proyecto nace de una idea única y se desarrolla con tecnologías de vanguardia como <span className="font-semibold text-orange-400">React, Python y cloud storage</span>, garantizando un resultado robusto, escalable y 100% personalizado para tus objetivos.
                         </motion.p>
                     </motion.div>
                 </motion.div>

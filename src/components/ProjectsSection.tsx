@@ -110,7 +110,6 @@ export function ProjectsSection() {
         setActiveProject((prev) => (prev - 1 + projects.length) % projects.length);
     };
 
-    // Swipe para mobile
     const [touchStart, setTouchStart] = useState(0);
     const [touchEnd, setTouchEnd] = useState(0);
 
@@ -169,7 +168,6 @@ export function ProjectsSection() {
                         />
                     ))}
 
-                    {/* CONTADOR - Solo en desktop */}
                     {!isMobile && (
                         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
                             <div className="bg-gray-900/80 backdrop-blur-xl border border-white/20 rounded-full px-6 py-1">
@@ -182,7 +180,6 @@ export function ProjectsSection() {
                         </div>
                     )}
 
-                    {/* INDICIO DE SWIPE - Solo en mobile */}
                     {isMobile && (
                         <motion.div
                             className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-10"

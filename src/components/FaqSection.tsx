@@ -6,6 +6,7 @@ import {
 import { motion } from 'framer-motion';
 import { CustomAccordionItem } from "./UI/CustomAccordion";
 import { HeadingSection } from "./UI/HeadingSection";
+import { openWhatsApp } from "../utils/linkWhattsapp";
 
 export function FaqSection() {
     const containerVariants = {
@@ -76,7 +77,7 @@ export function FaqSection() {
                     answer: "¡Absolutamente! Trabajamos de forma remota con clientes de todo el mundo. Utilizamos herramientas de comunicación como Zoom y Slack para mantener un flujo de trabajo fluido y transparente, sin importar la distancia."
                 }
             ],
-            animation: "left" // Izquierda al centro
+            animation: "left"
         },
         {
             id: "tecnico",
@@ -86,7 +87,7 @@ export function FaqSection() {
                 {
                     id: "faq-4",
                     question: "¿Qué tecnologías utilizan para el desarrollo?",
-                    answer: "Usamos las mejores herramientas modernas para garantizar calidad y rendimiento. Para el frontend (lo que ve el usuario), principalmente React.js. Para backend (la lógica del servidor) y bases de datos, utilizamos tecnologías como Node.js, Firebase o PostgreSQL, según las necesidades de cada proyecto."
+                    answer: "Usamos las mejores herramientas modernas para garantizar calidad y rendimiento. Para el frontend (lo que ve el usuario), principalmente React.js. Para backend (la lógica del servidor) y bases de datos, utilizamos tecnologías como Python, Firebase y PostgreSQL, según las necesidades de cada proyecto."
                 },
                 {
                     id: "faq-5",
@@ -99,7 +100,7 @@ export function FaqSection() {
                     answer: "Por supuesto. Si ya tienes una identidad visual, la integraremos perfectamente en el diseño web. Si no tienes, o quieres renovarla, ofrecemos nuestro servicio de Diseño de Branding y Manual de Marca como un complemento perfecto para tu nuevo sitio web."
                 }
             ],
-            animation: "right" // Derecha al centro
+            animation: "right"
         },
         {
             id: "proceso",
@@ -122,7 +123,7 @@ export function FaqSection() {
                     answer: "Es un proceso colaborativo. Cuando tengamos el prototipo o la primera versión del desarrollo, tendrás 3 rondas de revisiones incluidas para solicitar ajustes. Utilizamos herramientas como Figma (para diseño) y enlaces de prueba (para desarrollo) para que puedas ver el progreso y comentar de manera clara y organizada."
                 }
             ],
-            animation: "left" // Izquierda al centro
+            animation: "left"
         },
         {
             id: "pagos-servicios",
@@ -347,12 +348,13 @@ export function FaqSection() {
                                     Estamos aquí para ayudarte. Contáctanos y resolveremos todas tus dudas personalmente.
                                 </motion.p>
                                 <motion.button
-                                    className="px-8 py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl"
+                                    className="cursor-pointer px-8 py-3 bg-orange-500 text-white rounded-xl font-semibold hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl"
                                     whileHover={{
                                         scale: 1.05,
                                         boxShadow: "0 20px 40px rgba(255, 140, 0, 0.3)"
                                     }}
                                     whileTap={{ scale: 0.95 }}
+                                    onClick={openWhatsApp}
                                 >
                                     Contactar ahora
                                 </motion.button>

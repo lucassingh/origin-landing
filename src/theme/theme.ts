@@ -19,7 +19,7 @@ export const FONT_CONFIG = {
 
 export const theme = {
     colors: {
-        primary: '#FF8C00', //color de accents
+        primary: '#FF8C00',
         secondary: '#FFB90F',
         accent: '#FFD700',
         dark: '#181818',

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { FiSend, FiUser, FiMail, FiMessageSquare, FiArrowRight } from 'react-icons/fi';
+import { FiSend, FiUser, FiMail, FiMessageSquare, FiArrowRight, FiCheck, FiX } from 'react-icons/fi';
+import { GoRocket } from "react-icons/go";
 import { HeadingSection } from './UI/HeadingSection';
 
 export function ContactSection() {
@@ -12,6 +13,8 @@ export function ContactSection() {
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [submitMessage, setSubmitMessage] = useState('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -24,17 +27,46 @@ export function ContactSection() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setSubmitStatus('idle');
 
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            const response = await fetch('https://formspree.io/f/xqaobdgd', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    _subject: `Nuevo mensaje de ${formData.name} - Portfolio`
+                }),
+            });
 
-        console.log('Formulario enviado:', formData);
-        setFormData({
-            name: '',
-            email: '',
-            message: '',
-            terms: false
-        });
-        setIsSubmitting(false);
+            if (response.ok) {
+                setSubmitStatus('success');
+                setSubmitMessage('¡Mensaje enviado con éxito! Te responderemos en 24 horas.');
+                setFormData({
+                    name: '',
+                    email: '',
+                    message: '',
+                    terms: false
+                });
+            } else {
+                throw new Error('Error en el envío');
+            }
+        } catch (error) {
+            setSubmitStatus('error');
+            setSubmitMessage('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
+        } finally {
+            setIsSubmitting(false);
+
+            // Auto-ocultar el mensaje después de 5 segundos
+            setTimeout(() => {
+                setSubmitStatus('idle');
+                setSubmitMessage('');
+            }, 5000);
+        }
     };
 
     const containerVariants = {
@@ -95,10 +127,36 @@ export function ContactSection() {
         }
     };
 
+    const notificationVariants = {
+        hidden: {
+            opacity: 0,
+            y: -50,
+            scale: 0.8
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: 0.5,
+                ease: "easeOut"
+            }
+        },
+        exit: {
+            opacity: 0,
+            y: -50,
+            scale: 0.8,
+            transition: {
+                duration: 0.3,
+                ease: "easeIn"
+            }
+        }
+    };
+
     return (
         <section id="contact" className="relative min-h-screen py-24 md:py-32 overflow-hidden">
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-black via-[#0A0A1A] to-black" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-black via-[#0A0A1A] to-black"></div>
 
                 <motion.div
                     className="absolute top-20 left-10% w-96 h-96 bg-[#FF8C00]/15 rounded-full blur-3xl"
@@ -167,6 +225,40 @@ export function ContactSection() {
                 />
             </div>
 
+            {submitStatus !== 'idle' && (
+                <motion.div
+                    className="fixed top-6 right-6 z-50 max-w-sm"
+                    variants={notificationVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                >
+                    <div className={`p-4 rounded-xl border backdrop-blur-sm ${submitStatus === 'success'
+                        ? 'bg-[#FFB90F]/10 border-[#FFB90F]/30 text-[#FFB90F]'
+                        : 'bg-red-500/10 border-red-500/30 text-red-400'
+                        }`}>
+                        <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-full ${submitStatus === 'success'
+                                ? 'bg-[#FFB90F]/20'
+                                : 'bg-red-500/20'
+                                }`}>
+                                {submitStatus === 'success' ? (
+                                    <FiCheck className="text-lg" />
+                                ) : (
+                                    <FiX className="text-lg" />
+                                )}
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-semibold">
+                                    {submitStatus === 'success' ? '¡Éxito!' : 'Error'}
+                                </p>
+                                <p className="text-sm opacity-90">{submitMessage}</p>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+
             <div className="relative z-10 w-full max-w-7xl mx-auto px-[5%]">
                 <motion.div
                     initial="hidden"
@@ -233,12 +325,12 @@ export function ContactSection() {
                                     </motion.div>
 
                                     <motion.div
-                                        className="flex items-center gap-4 p-4  rounded-xl border border-white/10 hover:border-orange-500/30 transition-all duration-300"
+                                        className="flex items-center gap-4 p-4 rounded-xl border border-white/10 hover:border-orange-500/30 transition-all duration-300"
                                         whileHover={{ x: 8 }}
                                         transition={{ delay: 0.2 }}
                                     >
                                         <div className="w-12 h-12 bg-orange-500/20 rounded-lg flex items-center justify-center border border-orange-500/30">
-                                            <span className="text-orange-400 text-xl">🚀</span>
+                                            <GoRocket className="text-orange-400 text-xl" />
                                         </div>
                                         <div>
                                             <h4 className="text-white font-semibold">Propuesta Personalizada</h4>
@@ -301,7 +393,7 @@ export function ContactSection() {
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                 >
-                                    Iniciar <span className="text-orange-400">comunicación</span>
+                                    Contanos <span className="text-orange-400">tu proyecto</span>
                                 </motion.h3>
 
                                 <div className="space-y-6">

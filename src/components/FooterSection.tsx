@@ -8,6 +8,7 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { LogoFooter } from './UI/LogoFooter';
 import logoFooterMobile from '../assets/imgs/logos/logo-footer-mobile.svg'
+import { openWhatsApp } from '../utils/linkWhattsapp';
 
 export function FooterSection() {
     const containerVariants = {
@@ -185,7 +186,7 @@ export function FooterSection() {
                             </motion.div>
                         </motion.div>
 
-                        <motion.div
+                        {/* <motion.div
                             className="pt-4"
                             variants={itemVariants}
                         >
@@ -206,7 +207,7 @@ export function FooterSection() {
                                     </motion.a>
                                 ))}
                             </div>
-                        </motion.div>
+                        </motion.div> */}
 
                         <motion.div
                             className="mt-8 lg:mt-20"
@@ -229,20 +230,20 @@ export function FooterSection() {
                             >
                                 <motion.div variants={itemVariants}>
                                     <p className="mb-2 text-sm font-semibold text-gray-300">Dirección</p>
-                                    <p className="text-white">Buenos Aires, Argentina</p>
+                                    <p className="text-white">Venado Tuerto, Santa Fe, Argentina</p>
                                 </motion.div>
 
                                 <motion.div variants={itemVariants}>
                                     <p className="mb-2 text-sm font-semibold text-gray-300">Contacto</p>
                                     <div className="space-y-1">
-                                        <motion.a
-                                            href="tel:+5493462565888"
+                                        <motion.button
+                                            onClick={openWhatsApp}
                                             className="block text-white hover:text-[#FF8C00] transition-colors duration-300"
                                             whileHover={{ x: 5 }}
                                             transition={{ duration: 0.2 }}
                                         >
-                                            +54 9 (3462) 565888
-                                        </motion.a>
+                                            +54 9 (3462) 2549129
+                                        </motion.button>
                                         <motion.a
                                             href="mailto:info@originstudio.com"
                                             className="block text-white hover:text-[#FF8C00] transition-colors duration-300"
@@ -285,7 +286,7 @@ export function FooterSection() {
                             variants={containerVariants}
                         >
                             <motion.div variants={itemVariants}>
-                                <h3 className="mb-6 text-lg font-semibold text-gray-300">Navegación</h3>
+                                {/* <h3 className="mb-6 text-lg font-semibold text-gray-300">Navegación</h3>
                                 <ul className="space-y-3">
                                     {navigationLinks.principales.map((link) => (
                                         <motion.li key={link.name}>
@@ -300,13 +301,13 @@ export function FooterSection() {
                                             </motion.a>
                                         </motion.li>
                                     ))}
-                                </ul>
+                                </ul> */}
                             </motion.div>
 
                             <motion.div variants={itemVariants}>
-                                <h3 className="mb-6 text-lg font-semibold text-gray-300">Más información</h3>
+                                <h3 className="mb-6 text-lg font-semibold text-gray-300">Navegación</h3>
                                 <ul className="space-y-3">
-                                    {navigationLinks.secundarios.map((link) => (
+                                    {navigationLinks.principales.map((link) => (
                                         <motion.li key={link.name}>
                                             <motion.a
                                                 href={link.href}

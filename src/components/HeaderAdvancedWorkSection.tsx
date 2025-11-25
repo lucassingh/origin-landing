@@ -20,7 +20,7 @@ export function HeaderAdvancedWorkSection() {
                 className="text-center mb-16"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }} // once: false para que se repita
+                viewport={{ once: false }}
                 transition={{ duration: 0.8 }}
             >
                 <span className="inline-flex items-center px-4 py-2 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-300 text-sm font-semibold backdrop-blur-sm">
@@ -33,21 +33,20 @@ export function HeaderAdvancedWorkSection() {
                 </span>
             </motion.div>
 
-            {/* Título principal */}
             <motion.div
                 className="text-center mb-20"
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false }} // once: false para que se repita
+                viewport={{ once: false }}
                 transition={{ duration: 1, delay: 0.3 }}
             >
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-6">
                     <span className="bg-linear-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                        Desde el origen
+                        De la idea inicial
                     </span>
                     <br />
                     <span className="bg-linear-to-r from-orange-400 to-yellow-400 bg-clip-text text-transparent">
-                        hasta el universo digital
+                        al producto final
                     </span>
                 </h2>
                 <motion.p
@@ -57,7 +56,7 @@ export function HeaderAdvancedWorkSection() {
                     viewport={{ once: false }}
                     transition={{ delay: 0.6, duration: 0.8 }}
                 >
-                    Cada proyecto inicia como una idea y con Origin la expandimos hasta un ecosistema completo.
+                    Cada proyecto nace con tu idea y con Origin la convertimos en realidad.
                     <span className="text-orange-400 font-semibold"> Tu visión, nuestro código y un universo de posibilidades.</span>
                 </motion.p>
             </motion.div>

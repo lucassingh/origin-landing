@@ -7,6 +7,7 @@ import {
     BiLogoLinkedinSquare,
 } from "react-icons/bi";
 import { RxChevronDown } from "react-icons/rx";
+import { FiCheck, FiX } from "react-icons/fi";
 import logo from "../assets/imgs/logos/logo.svg"
 import { smoothScrollTo } from "../utils/smoothScroll";
 
@@ -244,7 +245,7 @@ const SubMenu = ({ navLink }: { navLink: NavLink }) => {
 const Menu = ({
     menuLinks,
     getInTouch,
-    socialMediaLinks,
+    //socialMediaLinks,
     contactHeading,
     contactDescription,
     inputPlaceholder,
@@ -271,11 +272,58 @@ const Menu = ({
         message: ""
     });
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+    const [submitMessage, setSubmitMessage] = useState('');
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("Datos del formulario de contacto:", formData);
-        alert("Mensaje enviado! Te contactaremos pronto.");
-        setFormData({ name: "", email: "", message: "" });
+        setIsSubmitting(true);
+        setSubmitStatus('idle');
+
+        try {
+            const response = await fetch('https://formspree.io/f/xqaobdgd', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    message: formData.message,
+                    _subject: `Nuevo mensaje desde Navbar - ${formData.name}`,
+                    _source: 'navbar-menu'
+                }),
+            });
+
+            if (response.ok) {
+                setSubmitStatus('success');
+                setSubmitMessage('¡Mensaje enviado con éxito! Te responderé en 24 horas.');
+                setFormData({
+                    name: "",
+                    email: "",
+                    message: ""
+                });
+
+                // Auto-cerrar el menú después de éxito (opcional)
+                setTimeout(() => {
+                    setIsMenuOpen(false);
+                }, 2000);
+            } else {
+                throw new Error('Error en el envío');
+            }
+        } catch (error) {
+            setSubmitStatus('error');
+            setSubmitMessage('Hubo un error al enviar el mensaje. Por favor, intenta nuevamente.');
+        } finally {
+            setIsSubmitting(false);
+
+            // Auto-ocultar el mensaje después de 5 segundos
+            setTimeout(() => {
+                setSubmitStatus('idle');
+                setSubmitMessage('');
+            }, 5000);
+        }
     };
 
     const handleInputChange = (field: string, value: string) => {
@@ -283,6 +331,32 @@ const Menu = ({
             ...prev,
             [field]: value
         }));
+    };
+
+    const notificationVariants = {
+        hidden: {
+            opacity: 0,
+            y: -20,
+            scale: 0.8
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: {
+                duration: 0.4,
+                ease: "easeOut"
+            }
+        },
+        exit: {
+            opacity: 0,
+            y: -20,
+            scale: 0.8,
+            transition: {
+                duration: 0.3,
+                ease: "easeIn"
+            }
+        }
     };
 
     return (
@@ -293,6 +367,41 @@ const Menu = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
         >
+            {/* Notificación dentro del menú */}
+            {submitStatus !== 'idle' && (
+                <motion.div
+                    className="fixed top-6 right-6 z-50 max-w-sm"
+                    variants={notificationVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                >
+                    <div className={`p-4 rounded-xl border backdrop-blur-sm ${submitStatus === 'success'
+                        ? 'bg-[#FFB90F]/10 border-[#FFB90F]/30 text-[#FFB90F]'
+                        : 'bg-red-500/10 border-red-500/30 text-red-400'
+                        }`}>
+                        <div className="flex items-center gap-3">
+                            <div className={`p-2 rounded-full ${submitStatus === 'success'
+                                ? 'bg-[#FFB90F]/20'
+                                : 'bg-red-500/20'
+                                }`}>
+                                {submitStatus === 'success' ? (
+                                    <FiCheck className="text-lg" />
+                                ) : (
+                                    <FiX className="text-lg" />
+                                )}
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-semibold">
+                                    {submitStatus === 'success' ? '¡Éxito!' : 'Error'}
+                                </p>
+                                <p className="text-sm opacity-90">{submitMessage}</p>
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            )}
+
             <motion.div
                 variants={{
                     open: { opacity: 1 },
@@ -336,8 +445,9 @@ const Menu = ({
                                             placeholder="Tu nombre"
                                             value={formData.name}
                                             onChange={(e) => handleInputChange("name", e.target.value)}
-                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg h-12"
+                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg h-12 focus:border-[#FF8C00] focus:ring-[#FF8C00]/20 transition-all duration-300"
                                             required
+                                            disabled={isSubmitting}
                                         />
                                         <Input
                                             id="email"
@@ -345,23 +455,39 @@ const Menu = ({
                                             placeholder={inputPlaceholder}
                                             value={formData.email}
                                             onChange={(e) => handleInputChange("email", e.target.value)}
-                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg h-12"
+                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg h-12 focus:border-[#FF8C00] focus:ring-[#FF8C00]/20 transition-all duration-300"
                                             required
+                                            disabled={isSubmitting}
                                         />
                                         <Textarea
                                             id="message"
                                             placeholder={messagePlaceholder}
                                             value={formData.message}
                                             onChange={(e) => handleInputChange("message", e.target.value)}
-                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg min-h-24 resize-none"
+                                            className="text-white bg-white/10 border-white/20 placeholder:text-white/40 rounded-lg min-h-24 resize-none focus:border-[#FF8C00] focus:ring-[#FF8C00]/20 transition-all duration-300"
                                             required
+                                            disabled={isSubmitting}
                                         />
                                         <Button
                                             {...button}
                                             type="submit"
-                                            className="bg-white/10 backdrop-blur-sm cursor-pointer border border-[#FF8C00] text-white rounded-lg hover:bg-[#FF8C00] hover:text-gray-900 transition-all duration-300 h-12 mt-2"
+                                            disabled={isSubmitting}
+                                            className="bg-white/10 backdrop-blur-sm cursor-pointer border border-[#FF8C00] text-white rounded-lg hover:bg-[#FF8C00] hover:text-gray-900 transition-all duration-300 h-12 mt-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                         >
-                                            {button.title}
+                                            {isSubmitting ? (
+                                                <>
+                                                    <motion.span
+                                                        animate={{ rotate: 360 }}
+                                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                                        className="inline-block"
+                                                    >
+                                                        ⏳
+                                                    </motion.span>
+                                                    Enviando...
+                                                </>
+                                            ) : (
+                                                button.title
+                                            )}
                                         </Button>
                                     </form>
                                 </div>
@@ -378,7 +504,7 @@ const Menu = ({
                                     <p className="text-sm text-white/60">{getInTouch.address}</p>
                                 </div>
 
-                                <div className="flex items-center gap-4">
+                                {/* <div className="flex items-center gap-4">
                                     {socialMediaLinks.map((link, index) => (
                                         <a
                                             key={index}
@@ -388,7 +514,7 @@ const Menu = ({
                                             {link.icon}
                                         </a>
                                     ))}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
@@ -422,11 +548,11 @@ export const Navbar20Defaults: Props = {
     getInTouch: {
         phone: {
             url: "#",
-            number: "+54 9 3462565888",
+            number: "",
         },
         email: {
             url: "#",
-            contact: "origin@gmail.com",
+            contact: "",
         },
         address: "",
     },

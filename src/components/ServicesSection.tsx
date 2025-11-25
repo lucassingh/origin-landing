@@ -4,6 +4,7 @@ import { HeadingSection } from './UI/HeadingSection';
 import video1 from '../assets/videos/services/video-1.mp4'
 import img1 from '../assets/videos/services/img-1.jpg'
 import video3 from '../assets/videos/services/video-3.mp4'
+import { openWhatsApp } from '../utils/linkWhattsapp';
 
 export function ServicesSection() {
 
@@ -73,7 +74,7 @@ export function ServicesSection() {
         {
             category: "SITIOS WEBS, RÁPIDOS Y EFICIENTES",
             title: "Desarrollo web a medida",
-            description: "Desarrollamos tu presencia web desde cero, sin plantillas. Creamos experiencias rápidas y optimizadas para SEO que capturan la esencia de tu marca y convierten visitantes en clientes.",
+            description: "Desarrollamos aplicaciones web y móviles desde 0, sin plantillas. Aplicaciones con frontend - backend integrados y almacenados en la nube. Mantenimiento y creación de nuevas features",
             media: {
                 type: "video",
                 src: video3,
@@ -266,24 +267,16 @@ export function ServicesSection() {
                                         <Button
                                             variant="secondary"
                                             size="lg"
-                                            onClick={() => console.log("Comenzar proyecto")}
+                                            onClick={openWhatsApp}
                                         >
                                             Comenzar proyecto
                                         </Button>
-                                        <motion.div
-                                            className="text-gray-400 group-hover:text-orange-400 transition-colors duration-300"
-                                            animate={{ x: [0, 5, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                        >
-                                            <span className="text-sm">+15 proyectos exitosos</span>
-                                        </motion.div>
                                     </motion.div>
                                 </div>
 
-                                {/* Contenedor de media con padding uniforme */}
-                                <div className="flex flex-col">
+                                <div className="flex flex-col relative">
                                     <motion.div
-                                        className="flex items-center justify-center overflow-hidden rounded-lg border border-white/10"
+                                        className="flex items-center justify-center overflow-hidden rounded-lg border border-white/10 relative"
                                         whileHover={{ scale: 1.05 }}
                                         transition={{ duration: 0.3 }}
                                     >
@@ -292,10 +285,7 @@ export function ServicesSection() {
                                             className="w-full h-64 lg:h-80 object-cover"
                                         />
                                         <motion.div
-                                            className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold"
-                                            animate={{ scale: [1, 1.1, 1] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                        >
+                                            className="absolute top-2 right-2 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
                                             Destacado
                                         </motion.div>
                                     </motion.div>
