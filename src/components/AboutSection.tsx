@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-const titleVariants = {
+import { motion, type Variants } from 'framer-motion';
+const titleVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i: number) => ({
         opacity: 1,

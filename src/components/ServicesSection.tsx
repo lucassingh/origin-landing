@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, type Variants } from 'framer-motion';
 import { Button } from './UI/Button';
 import { HeadingSection } from './UI/HeadingSection';
 import video1 from '../assets/videos/services/video-1.mp4'
@@ -8,7 +8,7 @@ import { openWhatsApp } from '../utils/linkWhattsapp';
 
 export function ServicesSection() {
 
-    const cardVariants = {
+    const cardVariants: Variants = {
         hiddenLeft: {
             opacity: 0,
             x: -60,
